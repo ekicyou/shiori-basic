@@ -12,7 +12,7 @@
  * グローバルインスタンス
  */
 static HINSTANCE hinst;
-static CShioriAPI *api;
+static CShioriAPI *api = NULL;
 
 
 /**----------------------------------------------------------------------------
@@ -56,7 +56,7 @@ SHIORI_API BOOL __cdecl load(HGLOBAL hGlobal_loaddir, long loaddir_len)
    AutoGrobalFree autoFree(hGlobal_loaddir);
    unload();
    CAtlString loaddir((LPSTR)hGlobal_loaddir, (int)loaddir_len);
-   api = new CShioriAPI(loaddir);
+   api = new CShioriAPI(hinst, loaddir);
    return true;
 }
 

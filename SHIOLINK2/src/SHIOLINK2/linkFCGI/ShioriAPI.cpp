@@ -6,8 +6,9 @@
 #include "StdAfx.h"
 #include "ShioriAPI.h"
 
-CShioriAPI::CShioriAPI(LPCTSTR loadDir)
-: mLoadDir(loadDir)
+CShioriAPI::CShioriAPI(HINSTANCE hInst, LPCTSTR loadDir)
+	:mInst(hInst)
+	,mLoadDir(loadDir)
 {
 }
 
