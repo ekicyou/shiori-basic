@@ -1,0 +1,6 @@
+glob:*.ncb
+glob:*.suo
+glob:./build/*
+glob:*.user
+glob:*.pdb
+glob:*.dll
