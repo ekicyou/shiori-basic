@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------------------
 #pragma once
 
-class ByteArray : CAtlArray<BYTE>{};
+class ByteArray : public CAtlArray<BYTE>{};
 
 class CShioriAPI
 {

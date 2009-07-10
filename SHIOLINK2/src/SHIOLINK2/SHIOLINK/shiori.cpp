@@ -31,20 +31,21 @@ public:
    }
 };
 
-// 応答情報を作成
-static HGLOBAL AllocArray(const ByteArray &res){
-
-
-	return NULL;
-}
 
 /* ----------------------------------------------------------------------------
  * エラーメッセージ作成
  */
 static void CreateBatRequestResponse(ByteArray &res, LPSTR msg){
-
-
-
+	CAtlStringA text(      
+		"SHIORI/3.0 500 Internal Server Error\r\n"
+		"Charset: UTF-8\r\n"
+		"Sender: SHIOLINK2\r\n"
+		"X-SHIOLINK-Reason: "
+		);
+	text += msg;
+	text += "\r\n\r\n";
+	res.SetCount(text.GetLength());
+	::CopyMemory(res.GetData(), (LPCSTR)text, text.GetLength());
 }
 
 /* ----------------------------------------------------------------------------
@@ -53,13 +54,8 @@ static void CreateBatRequestResponse(ByteArray &res, LPSTR msg){
 SHIORI_API BOOL __cdecl load(HGLOBAL hGlobal_loaddir, long loaddir_len)
 {
    AutoGrobalFree autoFree(hGlobal_loaddir);
-   if (api != NULL) {
-      delete api;
-      api = NULL;
-   }
-//   CAtlStringA loaddirA((const char*)hGlobal_loaddir, (size_t)loaddir_len);
-//   CAtlString loaddir(loaddirA);
-   CAtlString loaddir((LPSTR)hGlobal_loaddir, (size_t)loaddir_len);
+   unload();
+   CAtlString loaddir((LPSTR)hGlobal_loaddir, (int)loaddir_len);
    api = new CShioriAPI(loaddir);
    return true;
 }
@@ -81,13 +77,18 @@ SHIORI_API BOOL __cdecl unload(void)
  */
 SHIORI_API HGLOBAL __cdecl request(HGLOBAL hGlobal_request, long& len)
 {
-   AutoGrobalFree autoFree(hGlobal_request);
-   ByteArray res;
-   bool rc = api->Request((const BYTE*) hGlobal_request, len, res);
-   if (!rc) {
-      CreateBatRequestResponse(res ,"SHIOLINK2 API return false");
-   }
-   return AllocArray(res);
+	AutoGrobalFree autoFree(hGlobal_request);
+	ByteArray res;
+	bool rc = api->Request((const BYTE*) hGlobal_request, len, res);
+	if (!rc) {
+		CreateBatRequestResponse(res ,"SHIOLINK2 API return false");
+	}
+
+	// 応答情報の作成
+	HGLOBAL hRES =GlobalAlloc(GMEM_FIXED ,res.GetCount());
+	CopyMemory(hRES ,res.GetData() ,res.GetCount());
+	len =(long)res.GetCount();
+	return hRES;
 }
 
 /**----------------------------------------------------------------------------
