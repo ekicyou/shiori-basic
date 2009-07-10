@@ -36,3 +36,6 @@
 #include <atlcoll.h>
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照してください。
+#define SHIORI_API_IMPLEMENTS
+
+//
