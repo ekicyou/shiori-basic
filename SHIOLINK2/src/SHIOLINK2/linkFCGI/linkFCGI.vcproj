@@ -21,6 +21,7 @@
 			IntermediateDirectory="$(SolutionDir)build\$(ConfigurationName)\obj\$(ProjectName)"
 			ConfigurationType="4"
 			UseOfATL="1"
+			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
 			>
 			<Tool
@@ -44,7 +45,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -84,6 +85,7 @@
 			IntermediateDirectory="$(SolutionDir)build\$(ConfigurationName)\obj\$(ProjectName)"
 			ConfigurationType="4"
 			UseOfATL="1"
+			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -105,7 +107,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -149,6 +151,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\RequestFCGI.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ShioriAPI.cpp"
 				>
 			</File>
@@ -172,6 +178,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\util.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="ヘッダー ファイル"
@@ -179,11 +189,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\RequestFCGI.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ShioriAPI.h"
 				>
 			</File>
 			<File
 				RelativePath=".\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\util.h"
 				>
 			</File>
 		</Filter>
