@@ -5,18 +5,5 @@
 // ----------------------------------------------------------------------------
 #pragma once
 
-#include "fcgibase.h"
+class ByteArray : public CAtlArray<BYTE>{};
 
-class CShioriAPI
-{
-private:
-	HINSTANCE  mInst;
-	CAtlString mLoadDir;
-
-public:
-	CShioriAPI(HINSTANCE hInst, LPCTSTR loadDir);
-	~CShioriAPI(void);
-public:
-	// リクエストを処理し、応答を作成します。
-	bool Request(const BYTE *req, const long reqLength, ByteArray &res);
-};

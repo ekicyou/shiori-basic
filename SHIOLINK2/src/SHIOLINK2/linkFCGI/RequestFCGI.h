@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ShioriAPI.h"
+#include "fcgibase.h"
 
 
 class CRequestFCGI

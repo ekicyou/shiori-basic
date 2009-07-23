@@ -4,6 +4,6 @@
 //   http://sourceforge.jp/projects/opensource/wiki/licenses%2FMIT_license
 // ----------------------------------------------------------------------------
 #pragma once
-#include "ShioriAPI.h"
+#include "fcgibase.h"
 
 void CreateBatRequestResponse(ByteArray &res, LPSTR msg);

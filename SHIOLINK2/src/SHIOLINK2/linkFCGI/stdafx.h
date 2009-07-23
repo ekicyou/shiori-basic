@@ -34,5 +34,6 @@
 #include <atlbase.h>
 #include <atlstr.h>
 #include <atlcoll.h>
+#include <atlfile.h>
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照してください。

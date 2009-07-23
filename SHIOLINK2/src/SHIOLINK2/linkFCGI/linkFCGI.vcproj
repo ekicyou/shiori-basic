@@ -151,6 +151,14 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\ASyncWorker.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\FcgiProcess.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\RequestFCGI.cpp"
 				>
 			</File>
@@ -188,6 +196,18 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\ASyncWorker.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fcgibase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FcgiProcess.h"
+				>
+			</File>
 			<File
 				RelativePath=".\RequestFCGI.h"
 				>
