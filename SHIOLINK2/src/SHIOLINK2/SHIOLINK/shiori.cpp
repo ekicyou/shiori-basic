@@ -53,7 +53,8 @@ SHIORI_API BOOL __cdecl load(HGLOBAL hGlobal_loaddir, long loaddir_len)
    AutoGrobalFree autoFree(hGlobal_loaddir);
    ATLTRACE2(_T("[SHIORI::load]\n"));
    unloadImpl();
-   CAtlString loaddir((LPSTR)hGlobal_loaddir, (int)loaddir_len);
+   CAtlString sLoaddir((LPSTR)hGlobal_loaddir, (int)loaddir_len);
+   CPath loaddir(sLoaddir);
    ATLTRACE2(_T("[SHIORI::load] loaddir = %s\n"), (LPCTSTR)loaddir);
    api = new CShioriAPI(hinst, loaddir);
    return true;

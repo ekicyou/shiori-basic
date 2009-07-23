@@ -33,6 +33,7 @@
 
 #include <atlbase.h>
 #include <atlstr.h>
+#include <atlpath.h>
 #include <atlcoll.h>
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照してください。

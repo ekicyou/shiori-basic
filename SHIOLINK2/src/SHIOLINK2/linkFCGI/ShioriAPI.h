@@ -11,7 +11,7 @@ class CShioriAPI
 {
 private:
 	HINSTANCE  mInst;
-	CAtlString mLoadDir;
+	CPath mLoadDir;
 
 public:
 	CShioriAPI(HINSTANCE hInst, LPCTSTR loadDir);

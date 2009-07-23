@@ -33,6 +33,7 @@
 
 #include <atlbase.h>
 #include <atlstr.h>
+#include <atlpath.h>
 #include <atlcoll.h>
 #include <atlfile.h>
 

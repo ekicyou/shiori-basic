@@ -10,6 +10,8 @@ CShioriAPI::CShioriAPI(HINSTANCE hInst, LPCTSTR loadDir)
 	:mInst(hInst)
 	,mLoadDir(loadDir)
 {
+	mLoadDir.AddBackslash();
+	ATLTRACE2(_T("[CShioriAPI::CShioriAPI] loaddir=%s\n"), (LPCTSTR)mLoadDir);
 }
 
 CShioriAPI::~CShioriAPI(void)

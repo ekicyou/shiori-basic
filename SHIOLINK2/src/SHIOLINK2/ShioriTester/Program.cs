@@ -14,7 +14,6 @@ namespace ShioriTester
                 bool rc = API.Load(loaddir);
 
 
-
                 rc = API.Unload();
             }
             catch (Exception ex) {
