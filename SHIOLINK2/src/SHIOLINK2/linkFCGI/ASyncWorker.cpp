@@ -10,17 +10,28 @@ CASyncWorker::~CASyncWorker(void)
 {
 }
 
+/* ----------------------------------------------------------------------------
+ * ハンドルアタッチ
+ */
+int CASyncWorker::Attach(HANDLE h)
+{
+	if(m_hIOCP)	m_hIOCP.Close();
+	m_hIOCP.Attach(CreateIoCompletionPort ( h, g_hIOCP, NULL, 0));
+	if(!m_hIOCP) return FALSE;
+	return TRUE;
+}
+
 
 /* ----------------------------------------------------------------------------
  * ワーカ初期化
  */
 int CASyncWorker::InitWorker(DWORD numberOfThread)
 {
-	g_hIOCP = CreateIoCompletionPort (
+	g_hIOCP = CHandle(CreateIoCompletionPort (
 		INVALID_HANDLE_VALUE,
 		NULL,
 		NULL,
-		numberOfThread - 2);
+		numberOfThread - 2));
 
 	if ( !g_hIOCP ) {
 		ATLTRACE2(_T("[CASyncWorker::InitWorker] CreateIoCompletionPort failed.\n"));
@@ -59,7 +70,9 @@ int CASyncWorker::EndWorker(DWORD timeout)
 		PostQueuedCompletionStatus ( g_hIOCP, 0, COMP_KEY_EXIT, pOl);
 	}
 	WaitForMultipleObjects ( gThreads.GetSize(), gThreads.GetData() , TRUE, timeout );
+	for(int i=0; i<gThreads.GetSize(); i++) CloseHandle(gThreads[i]);
 	gThreads.RemoveAll();
+	g_hIOCP.Close();
 	return TRUE;
 }
 

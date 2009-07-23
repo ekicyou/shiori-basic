@@ -4,3 +4,6 @@ glob:./build/*
 glob:*.user
 glob:*.pdb
 glob:*.dll
+glob:./Debug/*
+glob:./Release/*
+glob:./obj/*

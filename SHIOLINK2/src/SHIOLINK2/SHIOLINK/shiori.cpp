@@ -32,6 +32,18 @@ public:
    }
 };
 
+/* ----------------------------------------------------------------------------
+ * unload_impl
+ */
+static BOOL unloadImpl(void)
+{
+   if (api != NULL) {
+      delete api;
+      api = NULL;
+   }
+   return true;
+}
+
 
 /* ----------------------------------------------------------------------------
  * 栞 Method / load
@@ -39,8 +51,10 @@ public:
 SHIORI_API BOOL __cdecl load(HGLOBAL hGlobal_loaddir, long loaddir_len)
 {
    AutoGrobalFree autoFree(hGlobal_loaddir);
-   unload();
+   ATLTRACE2(_T("[SHIORI::load]\n"));
+   unloadImpl();
    CAtlString loaddir((LPSTR)hGlobal_loaddir, (int)loaddir_len);
+   ATLTRACE2(_T("[SHIORI::load] loaddir = %s\n"), (LPCTSTR)loaddir);
    api = new CShioriAPI(hinst, loaddir);
    return true;
 }
@@ -50,11 +64,8 @@ SHIORI_API BOOL __cdecl load(HGLOBAL hGlobal_loaddir, long loaddir_len)
  */
 SHIORI_API BOOL __cdecl unload(void)
 {
-   if (api != NULL) {
-      delete api;
-      api = NULL;
-   }
-   return true;
+   ATLTRACE2(_T("[SHIORI::unload]\n"));
+   return unloadImpl();
 }
 
 /* ----------------------------------------------------------------------------
@@ -63,6 +74,7 @@ SHIORI_API BOOL __cdecl unload(void)
 SHIORI_API HGLOBAL __cdecl request(HGLOBAL hGlobal_request, long& len)
 {
 	AutoGrobalFree autoFree(hGlobal_request);
+   ATLTRACE2(_T("[SHIORI::request]\n"));
 	ByteArray res;
 	bool rc = api->Request((const BYTE*) hGlobal_request, len, res);
 	if (!rc) {
@@ -96,7 +108,7 @@ extern "C" __declspec(dllexport) BOOL WINAPI DllMain(
       break;
 
    case    DLL_PROCESS_DETACH: // プロセス切り離し
-      unload();
+      unloadImpl();
       break;
 
    case    DLL_THREAD_ATTACH:  // スレッド接続
