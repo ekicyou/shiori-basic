@@ -7,3 +7,15 @@
 #include "fcgibase.h"
 
 void CreateBatRequestResponse(ByteArray &res, LPSTR msg);
+
+class Pushd
+{
+private:
+	CString mOldDir;
+
+public:
+	Pushd(LPCTSTR newdir);
+	~Pushd();
+};
+
+// EOF

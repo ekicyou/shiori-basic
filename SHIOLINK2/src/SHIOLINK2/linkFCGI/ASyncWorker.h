@@ -18,7 +18,6 @@ private:
 public:
 	CASyncWorker(void);
 	virtual ~CASyncWorker(void);
-	int WaitComplete(int timeout);
 
 protected:
 	int Attach(HANDLE h);

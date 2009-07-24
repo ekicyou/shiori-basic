@@ -12,7 +12,7 @@ namespace ShioriTester
             try {
                 string loaddir = AssemblyUtil.GetCallingAssemblyDirctory();
                 bool rc = API.Load(loaddir);
-
+                
 
                 rc = API.Unload();
             }

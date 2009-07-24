@@ -10,8 +10,11 @@ private:
 	const BYTE *mReq;
 	const long mReqLength;
 	ByteArray &mRes;
+	CEvent mEventEndRequest;
 
 public:
 	CRequestFCGI(int requestId, const BYTE *req, const long reqLength, ByteArray &res);
-	~CRequestFCGI(void);
+	virtual ~CRequestFCGI(void);
+
+	int Execute();
 };

@@ -3,11 +3,14 @@
 class CFcgiProcess
 {
 private:
-	CAtlFile mStdin;
-	CAtlFile mStdout;
-	CAtlFile mStderr;
+	CHandle mWritePipe;
+	CHandle mReadPipe;
+	CHandle mErrPipe;
+
+	STARTUPINFO mStartInfo;
+	PROCESS_INFORMATION mProcessInfo;
 
 public:
-	CFcgiProcess(LPCTSTR commandline, LPCTSTR wrkdir);
+	CFcgiProcess(LPCTSTR str_commandline, LPCTSTR str_wrkdir);
 	~CFcgiProcess(void);
 };

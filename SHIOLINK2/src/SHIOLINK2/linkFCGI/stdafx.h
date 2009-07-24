@@ -36,5 +36,6 @@
 #include <atlpath.h>
 #include <atlcoll.h>
 #include <atlfile.h>
+#include <atlsync.h>
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照してください。

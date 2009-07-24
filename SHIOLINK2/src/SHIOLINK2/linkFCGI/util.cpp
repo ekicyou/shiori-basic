@@ -22,3 +22,24 @@ void CreateBatRequestResponse(ByteArray &res, LPSTR msg){
 	::CopyMemory(res.GetData(), (LPCSTR)text, text.GetLength());
 }
 
+/**----------------------------------------------------------------------------
+ * カレントディレクトリ移動＆復帰
+ */
+
+Pushd::Pushd(LPCTSTR newdir)
+	:mOldDir()
+{
+	TCHAR buf[_MAX_PATH+1];
+	GetCurrentDirectory(sizeof(buf), buf);
+	mOldDir = buf;
+	BOOL rc = SetCurrentDirectory(newdir);
+	if(!rc) AtlThrow( FAILED(ERROR_CURRENT_DIRECTORY) );
+}
+
+Pushd::~Pushd()
+{
+	if(mOldDir.IsEmpty()) return;
+	SetCurrentDirectory(mOldDir);
+}
+
+// EOF
