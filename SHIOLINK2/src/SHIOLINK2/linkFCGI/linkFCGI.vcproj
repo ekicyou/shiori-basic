@@ -155,6 +155,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FcgiAPI.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\FcgiProcess.cpp"
 				>
 			</File>
@@ -198,6 +202,14 @@
 			>
 			<File
 				RelativePath=".\ASyncWorker.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fastcgi.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FcgiAPI.h"
 				>
 			</File>
 			<File
