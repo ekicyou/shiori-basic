@@ -3,19 +3,25 @@
 //   The MIT License
 //   http://sourceforge.jp/projects/opensource/wiki/licenses%2FMIT_license
 // ----------------------------------------------------------------------------
+// パイプ通信プロセス管理
 #pragma once
 #include "util.h"
 
-class CShioriAPI
+class CPipeProcess
 {
 private:
-	HINSTANCE mInst;
-	CPath     mLoadDir;
+	CPath mPipeName;
+	CHandle mWritePipe;
+	CHandle mReadPipe;
+
+	STARTUPINFO mStartInfo;
+	PROCESS_INFORMATION mProcessInfo;
 
 public:
-	CShioriAPI(HINSTANCE hInst, LPCTSTR loadDir);
-	virtual ~CShioriAPI(void);
-public:
-	// リクエストを処理し、応答を作成します。
-	bool Request(const BYTE *req, const long reqLength, ByteArray &res);
+	CPipeProcess(LPCTSTR str_commandline, LPCTSTR str_wrkdir);
+	virtual ~CPipeProcess(void);
+	LPCTSTR GetPipeName();
+
+private:
+	void CreatePipe();
 };
