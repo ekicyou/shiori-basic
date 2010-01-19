@@ -8,14 +8,7 @@
 #include "..\\common\\targetver.h"
 
 #define WIN32_LEAN_AND_MEAN             // Windows ヘッダーから使用されていない部分を除外します。
-// Windows ヘッダー ファイル:
-#include <windows.h>
 
 
-#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS      // 一部の CString コンストラクタは明示的です。
-
-#include <atlbase.h>
-#include <atlstr.h>
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照してください。
-#define SHIORI_API_IMPLEMENTS
