@@ -22,6 +22,8 @@ public:
 	virtual ~CPipeProcess(void);
 	LPCTSTR GetPipeName();
 
+public:
+
 private:
 	void CreatePipe();
 };

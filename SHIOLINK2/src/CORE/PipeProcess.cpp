@@ -37,13 +37,6 @@ LPCTSTR CPipeProcess::GetPipeName(){ return mPipeName; }
 /* ----------------------------------------------------------------------------
  * ÉpÉCÉvÇÃçÏê¨
  */
-static UINT GenRandomNumber(){
-	FILETIME create, exit, kernel, user;
-	HANDLE cp = GetCurrentProcess();
-	BOOL rc = GetProcessTimes(cp, &create, &exit, &kernel, &user);
-	srand(user.dwLowDateTime);
-	return rand();
-}
 
 void CPipeProcess::CreatePipe()
 {

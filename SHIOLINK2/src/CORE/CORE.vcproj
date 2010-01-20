@@ -152,6 +152,14 @@
 		<Filter
 			Name="PIPE"
 			>
+			<File
+				RelativePath=".\PipeProcess.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PipeProcess.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="SHIORI_API"
@@ -201,14 +209,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\PipeProcess.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PipeProcess.h"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

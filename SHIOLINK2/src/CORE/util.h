@@ -8,6 +8,8 @@
 class ByteArray : public CAtlArray<BYTE>{};
 
 void CreateBatRequestResponse(ByteArray &res, LPSTR msg);
+void ResetRandomNumber();
+UINT GenRandomNumber();
 
 class Pushd
 {

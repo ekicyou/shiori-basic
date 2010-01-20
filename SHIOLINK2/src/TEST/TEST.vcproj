@@ -182,6 +182,10 @@
 				RelativePath=".\TEST.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\UtilTest.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="ETC"
