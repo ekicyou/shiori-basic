@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="CORE"
-	ProjectGUID="{4125BC80-C508-4085-A552-E4DE222D469C}"
-	RootNamespace="CORE"
+	Name="TEST"
+	ProjectGUID="{CD1F52A7-3A41-4342-A646-BD41792035B9}"
+	RootNamespace="TEST"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)build\$(ConfigurationName)\bin"
 			IntermediateDirectory="$(SolutionDir)build\$(ConfigurationName)\obj\$(ProjectName)"
-			ConfigurationType="4"
+			ConfigurationType="1"
 			UseOfMFC="1"
 			UseOfATL="1"
 			CharacterSet="1"
@@ -43,13 +43,15 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)COMMON&quot;;&quot;$(SolutionDir)CORE&quot;;&quot;$(SolutionDir)..\..\externals\gtest\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4748"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -61,10 +63,17 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				LinkIncremental="2"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -76,6 +85,9 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -83,7 +95,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)build\$(ConfigurationName)\bin"
 			IntermediateDirectory="$(SolutionDir)build\$(ConfigurationName)\obj\$(ProjectName)"
-			ConfigurationType="4"
+			ConfigurationType="1"
 			UseOfMFC="1"
 			UseOfATL="1"
 			CharacterSet="1"
@@ -108,12 +120,14 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)COMMON&quot;;&quot;$(SolutionDir)CORE&quot;;&quot;$(SolutionDir)..\..\externals\gtest\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4748"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -125,10 +139,19 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				LinkIncremental="1"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -140,6 +163,9 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -148,18 +174,12 @@
 	</References>
 	<Files>
 		<Filter
-			Name="PIPE"
-			>
-		</Filter>
-		<Filter
-			Name="SHIORI_API"
+			Name="TEST"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ShioriAPI.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ShioriAPI.h"
+				RelativePath=".\TEST.cpp"
 				>
 			</File>
 		</Filter>
@@ -190,23 +210,7 @@
 				RelativePath=".\stdafx.h"
 				>
 			</File>
-			<File
-				RelativePath=".\util.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\util.h"
-				>
-			</File>
 		</Filter>
-		<File
-			RelativePath=".\PipeProcess.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\PipeProcess.h"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -5,12 +5,9 @@
 
 #pragma once
 
-#include "..\\common\\targetver.h"
+#include "targetver.h"
 
-#define WIN32_LEAN_AND_MEAN             // Windows ヘッダーから使用されていない部分を除外します。
-// Windows ヘッダー ファイル:
-#include <windows.h>
-
+#include <tchar.h>
 
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS      // 一部の CString コンストラクタは明示的です。
 
@@ -20,4 +17,4 @@
 #include <atlcoll.h>
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照してください。
-#define SHIORI_API_IMPLEMENTS
+#include <gtest/gtest.h>
