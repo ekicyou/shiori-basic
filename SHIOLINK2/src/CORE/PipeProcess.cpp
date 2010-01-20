@@ -31,7 +31,9 @@ CPipeProcess::CPipeProcess(LPCTSTR str_commandline, LPCTSTR str_wrkdir)
 /* ----------------------------------------------------------------------------
  * Getter
  */
-LPCTSTR CPipeProcess::GetPipeName() const { return mPipe.GetName(); }
+LPCTSTR CPipeProcess::GetPipeBaseName() const { return mPipe.GetBaseName(); }
+CString CPipeProcess::GetPipeReqName()  const { return mPipe.GetReqName(); }
+CString CPipeProcess::GetPipeResName()  const { return mPipe.GetResName(); }
 
 // ----------------------------------------------------------------------------
 // EOF

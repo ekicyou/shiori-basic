@@ -18,6 +18,8 @@ private:
 public:
 	CPipeProcess(LPCTSTR str_commandline, LPCTSTR str_wrkdir);
 	virtual ~CPipeProcess(void);
-	LPCTSTR GetPipeName() const;
+	LPCTSTR GetPipeBaseName(void) const;
+	CString GetPipeReqName(void) const;
+	CString GetPipeResName(void) const;
 
 };
