@@ -1,6 +1,3 @@
-// TEST.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
-//
-
 #include "stdafx.h"
 
 static int test1(const int val){

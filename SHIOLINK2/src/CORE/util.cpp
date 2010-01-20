@@ -42,18 +42,4 @@ Pushd::~Pushd()
 	SetCurrentDirectory(mOldDir);
 }
 
-/**----------------------------------------------------------------------------
- * ŠÈˆÕ—”ì¬
- */
-UINT GenRandomNumber(){
-	return rand();
-}
-void ResetRandomNumber(){
-	FILETIME create, exit, kernel, user;
-	HANDLE cp = GetCurrentProcess();
-	BOOL rc = GetProcessTimes(cp, &create, &exit, &kernel, &user);
-	srand(user.dwLowDateTime);
-}
-
-
 // EOF

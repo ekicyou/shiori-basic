@@ -6,24 +6,18 @@
 // パイプ通信プロセス管理
 #pragma once
 #include "util.h"
+#include "pipe.h"
 
 class CPipeProcess
 {
 private:
-	CPath mPipeName;
-	CHandle mWritePipe;
-	CHandle mReadPipe;
-
+	CPipe mPipe;
 	STARTUPINFO mStartInfo;
 	PROCESS_INFORMATION mProcessInfo;
 
 public:
 	CPipeProcess(LPCTSTR str_commandline, LPCTSTR str_wrkdir);
 	virtual ~CPipeProcess(void);
-	LPCTSTR GetPipeName();
+	LPCTSTR GetPipeName() const;
 
-public:
-
-private:
-	void CreatePipe();
 };

@@ -153,6 +153,14 @@
 			Name="PIPE"
 			>
 			<File
+				RelativePath=".\Pipe.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Pipe.h"
+				>
+			</File>
+			<File
 				RelativePath=".\PipeProcess.cpp"
 				>
 			</File>
