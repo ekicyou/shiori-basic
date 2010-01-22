@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)COMMON&quot;;&quot;$(SolutionDir)CORE&quot;;&quot;$(SolutionDir)..\..\externals\gtest\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)COMMON&quot;;&quot;$(SolutionDir)CORE&quot;;&quot;$(SolutionDir)..\..\externals\gtest\include&quot;;&quot;$(SolutionDir)..\..\externals\gflags\src\windows&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -120,7 +120,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)COMMON&quot;;&quot;$(SolutionDir)CORE&quot;;&quot;$(SolutionDir)..\..\externals\gtest\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)COMMON&quot;;&quot;$(SolutionDir)CORE&quot;;&quot;$(SolutionDir)..\..\externals\gtest\include&quot;;&quot;$(SolutionDir)..\..\externals\gflags\src\windows&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
