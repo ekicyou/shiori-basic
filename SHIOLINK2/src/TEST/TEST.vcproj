@@ -43,8 +43,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)COMMON&quot;;&quot;$(SolutionDir)CORE&quot;;&quot;$(SolutionDir)..\..\externals\gtest\include&quot;;&quot;$(SolutionDir)..\..\externals\gflags\src\windows&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)COMMON&quot;;&quot;$(SolutionDir)CORE&quot;;&quot;$(SolutionDir)..\..\externals\gtest\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;GFLAGS_DLL_DECL=&quot; &quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -65,6 +65,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -120,8 +121,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)COMMON&quot;;&quot;$(SolutionDir)CORE&quot;;&quot;$(SolutionDir)..\..\externals\gtest\include&quot;;&quot;$(SolutionDir)..\..\externals\gflags\src\windows&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)COMMON&quot;;&quot;$(SolutionDir)CORE&quot;;&quot;$(SolutionDir)..\..\externals\gtest\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;GFLAGS_DLL_DECL=&quot; &quot;"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
@@ -141,6 +142,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="1"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -180,6 +182,10 @@
 			>
 			<File
 				RelativePath=".\PipeTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PipeTest.h"
 				>
 			</File>
 			<File
