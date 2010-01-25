@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "Pipe.h"
-#include "Util.h"
 
 /* ----------------------------------------------------------------------------
  * [CPipe]初期化・開放
@@ -41,7 +40,7 @@ void CPipe::SetID(LPCTSTR id)
 /* ----------------------------------------------------------------------------
  * [CPipe]書き込み
  */
-void CPipe::Write(const LPBYTE buf, DWORD length)
+void CPipe::Write(LPCSTR buf, DWORD length)
 {
 	LPBYTE pos = (LPBYTE)buf;
 	while(length > 0){
@@ -51,19 +50,134 @@ void CPipe::Write(const LPBYTE buf, DWORD length)
 		length -= resultLen;
 	}
 }
+void CPipe::Write(const CStringA& text)
+{
+	LPCSTR buf = text;
+	Write(buf, text.GetLength());
+}
 
 /* ----------------------------------------------------------------------------
  * [CPipe]読み込み
  */
-void CPipe::Read(LPBYTE buf, DWORD length)
+void CPipe::Read(LPSTR buf, DWORD length)
 {
-	LPBYTE pos = buf;
+	LPSTR pos = buf;
 	while(length > 0){
 		DWORD resultLen;
 		if(!::ReadFile(mRead, pos, length, &resultLen, NULL)) ::AtlThrowLastWin32();
 		pos += resultLen;
 		length -= resultLen;
 	}
+}
+
+
+/* ----------------------------------------------------------------------------
+ * [CPipe]netStringの書き込み
+ */
+void CPipe::WriteNetString(const ByteArray& buf)
+{
+	// フォーマットの作成
+	CStringA data;
+	data.Format("%d:", buf.GetCount());
+	data += CStringA((LPCSTR)buf.GetData(), buf.GetCount());
+	data += ',';
+
+	// 送信
+	Write(data);
+}
+void CPipe::WriteNetString(const CStringA& text)
+{
+	ByteArray buf;
+	buf.SetCount(text.GetLength());
+	memcpy(buf.GetData(), (LPCSTR)text, buf.GetCount());
+	WriteNetString(buf);
+}
+
+/* ----------------------------------------------------------------------------
+ * [CPipe]netStringの書き込み
+ */
+enum CharChass{
+	NETSTRING_SPLIT = -1,
+	NETSTRING_OTHER = -2,
+};
+const int CHECK_NETSTRING_SPLIT = (':' - '0');
+
+static inline int CharCheck(CHAR a){
+	if(a >= '0' && a <= '9') return a - '0';
+	if(a == ':')             return NETSTRING_SPLIT;
+	return NETSTRING_OTHER;
+}
+
+#define READONE(_pos_)                          \
+{                                               \
+	int a = CharCheck(buf[_pos_]);              \
+	if(a==NETSTRING_OTHER) return false;        \
+	if(a==NETSTRING_SPLIT) goto FIND_SPLIT;     \
+	len = len*10 + a; numLength++;              \
+}
+
+
+bool CPipe::ReadNetString(ByteArray& buf, LPSTR& pStart, int& length)
+{
+	size_t len;
+	size_t numLength = 0;
+	size_t bufSize = 3;
+	size_t readSize = 3;
+
+	// 最初の３文字を読む
+	if(buf.GetCount()<3) buf.SetCount(3);
+	Read(buf.GetData(), 3);
+
+	// １文字目
+	{
+		int a = CharCheck(buf[0]);
+		if(a<0 || a>9) return false;
+		len = a;
+		numLength++;
+		if(len==0){
+			if(buf[1] != ':') return false;
+			goto CHECK_LAST_CHAR;
+		}
+	}
+
+	// ２・３文字目
+	READONE(1);
+	READONE(2);
+
+	// 次の４文字を読む（最大で999999まで）
+	if(buf.GetCount()<7) buf.SetCount(7);
+	Read(buf.GetData()+3, 4);
+	readSize += 4;
+
+	READONE(3);
+	READONE(4);
+	READONE(5);
+	READONE(6);
+	return false;
+
+FIND_SPLIT:
+	// 残りを全て読み込む
+	bufSize = numLength + 1 + len + 1;
+	int remainSize = bufSize - readSize;
+	if(buf.GetCount()<bufSize) buf.SetCount(bufSize);
+	Read(buf.GetData()+readSize, remainSize);
+
+CHECK_LAST_CHAR:
+	// 最後の文字列が正しいか？
+	if(buf[bufSize-1] != ',') return false;
+
+	// 正しい
+	pStart = &buf[numLength + 1];
+	length =(int) len;
+	return true;
+}
+bool CPipe::ReadNetString(ByteArray& buf, CStringA& text)
+{
+	LPSTR pStart;
+	int length;
+	if(! ReadNetString(buf, pStart, length)) return false;
+	text = CStringA(pStart, length);
+	return true;
 }
 
 /* ----------------------------------------------------------------------------

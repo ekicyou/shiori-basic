@@ -5,7 +5,7 @@
 // ----------------------------------------------------------------------------
 #pragma once
 
-class ByteArray : public CAtlArray<BYTE>{};
+class ByteArray : public CAtlArray<CHAR>{};
 
 void CreateBatRequestResponse(ByteArray &res, LPSTR msg);
 

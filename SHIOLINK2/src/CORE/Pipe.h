@@ -1,4 +1,5 @@
 #pragma once
+#include "Util.h"
 
 class CPipe
 {
@@ -19,8 +20,15 @@ public:
 	CString GetReqName(void) const;
 	CString GetResName(void) const;
 
-	void Write(const LPBYTE buf, DWORD length);
-	void Read (      LPBYTE buf, DWORD length);
+	void Write(LPCSTR buf, DWORD length);
+	void Read (LPSTR  buf, DWORD length);
+
+	void Write(const CStringA& text);
+	void WriteNetString(const ByteArray& buf);
+	void WriteNetString(const CStringA& text);
+
+	bool ReadNetString(ByteArray& buf, LPSTR& pStart, int& length);
+	bool ReadNetString(ByteArray& buf, CStringA& text);
 
 protected:
 	void SetID(LPCTSTR id);

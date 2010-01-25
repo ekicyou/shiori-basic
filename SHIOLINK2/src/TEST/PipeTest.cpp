@@ -8,17 +8,54 @@ TEST(PipeTest, Create)
 		CServerPipe server;
 		server.Create();
 		CClientPipe client(server.GetID());
-
-		LPCSTR send = "a";
-		BYTE buf[2];
-		server.Write((const LPBYTE)send, 1);
-		client.Read(buf, 1);
-		ASSERT_EQ((BYTE)'a', buf[0]);
-
-		send = "x";
-		client.Write((const LPBYTE)send, 1);
-		server.Read(buf, 1);
-		ASSERT_EQ((BYTE)'x', buf[0]);
+		CHAR buf[2];
+		{
+			LPCSTR send = "a";
+			server.Write(send, 1);
+			client.Read(buf, 1);
+			ASSERT_EQ('a', buf[0]);
+		}
+		{
+			LPCSTR send = "x";
+			client.Write(send, 1);
+			server.Read(buf, 1);
+			ASSERT_EQ('x', buf[0]);
+		}
+		{
+			CStringA text, result;
+			server.WriteNetString(text);
+			ByteArray buf;
+			ASSERT_TRUE(client.ReadNetString(buf, result));
+			ASSERT_EQ(text, result);
+		}
+		{
+			CStringA text('a',9), result;
+			server.WriteNetString(text);
+			ByteArray buf;
+			ASSERT_TRUE(client.ReadNetString(buf, result));
+			ASSERT_EQ(text, result);
+		}
+		{
+			CStringA text('b',99), result;
+			server.WriteNetString(text);
+			ByteArray buf;
+			ASSERT_TRUE(client.ReadNetString(buf, result));
+			ASSERT_EQ(text, result);
+		}
+		{
+			CStringA text('c',999), result;
+			server.WriteNetString(text);
+			ByteArray buf;
+			ASSERT_TRUE(client.ReadNetString(buf, result));
+			ASSERT_EQ(text, result);
+		}
+		{
+			CStringA text('d',1000), result;
+			server.WriteNetString(text);
+			ByteArray buf;
+			ASSERT_TRUE(client.ReadNetString(buf, result));
+			ASSERT_EQ(text, result);
+		}
 	}
 	_ATLCATCH(e){
 		TCHAR buf[_MAX_PATH];
@@ -108,7 +145,7 @@ TEST(PipeTest, Exec2) {
 	{
 		pipe.WaitForConnection();
 		LPCSTR send = "a";
-		pipe.Write((const LPBYTE)send, 1);
+		pipe.Write(send, 1);
 	}
 
 	// プロセス終了待機処理
@@ -119,9 +156,9 @@ TEST(PipeTest, Exec2) {
 
 	// パイプ受信
 	{
-		BYTE buf[2];
+		CHAR buf[2];
 		pipe.Read(buf, 1);
-		ASSERT_EQ((BYTE)'a', buf[0]);
+		ASSERT_EQ('a', buf[0]);
 	}
 }
 static int runPipeServer2(int argc, char **argv)
@@ -133,7 +170,7 @@ static int runPipeServer2(int argc, char **argv)
 		// オウム返し
 		CString pipeID(argv[2]);
 		CClientPipe pipe(pipeID);
-		BYTE buf[2];
+		CHAR buf[2];
 		pipe.Read(buf, 1);
 		pipe.Write(buf, 1);
 		return 0;
