@@ -2,15 +2,15 @@
 #include "Pipe.h"
 #include "Util.h"
 
-CPipe::CPipe(void)
+CServerPipe::CServerPipe(void)
 {
 }
 
-CPipe::~CPipe(void)
+CServerPipe::~CServerPipe(void)
 {
 }
 
-void CPipe::Close(void)
+void CServerPipe::Close(void)
 {
 	if(mReqPipe!=NULL)	mReqPipe.Close();
 	if(mResPipe!=NULL)	mResPipe.Close();
@@ -20,14 +20,15 @@ void CPipe::Close(void)
 /* ----------------------------------------------------------------------------
  * Getter
  */
-LPCTSTR CPipe::GetBaseName() const { return mBaseName; }
-CString CPipe::GetReqName() const { return mBaseName + _T("req"); }
-CString CPipe::GetResName() const { return mBaseName + _T("res"); }
+LPCTSTR CServerPipe::GetID()       const { return mID; }
+LPCTSTR CServerPipe::GetBaseName() const { return mBaseName; }
+CString CServerPipe::GetReqName()  const { return mBaseName + _T("req"); }
+CString CServerPipe::GetResName()  const { return mBaseName + _T("res"); }
 
 /* ----------------------------------------------------------------------------
  * パイプの作成
  */
-void CPipe::Create(void)
+void CServerPipe::Create(void)
 {
 	for(int i=0; i<10; i++){
 		if(TryCreate()) return;
@@ -37,7 +38,7 @@ void CPipe::Create(void)
 
 
 static bool firstCreate = true;
-bool CPipe::TryCreate(void)
+bool CServerPipe::TryCreate(void)
 {
 	ATLTRACE2(_T("[%s]start.\n"), _T(__FUNCTION__));
 	Close();
@@ -51,6 +52,7 @@ bool CPipe::TryCreate(void)
 	// 名前の作成
 	for(UINT uUnique=rand() ;;uUnique++){
 		if(uUnique==0) continue;
+		mID.Format(_T("%x"), uUnique);
 		CAtlString buf;
 		buf.Format(_T("\\\\.\\pipe\\sl%x"), uUnique);
 		mBaseName = CPath(buf);
@@ -62,9 +64,7 @@ bool CPipe::TryCreate(void)
 
 	// SECURITY_ATTRIBUTES の設定(パイプを作るのに必要)
 	SECURITY_ATTRIBUTES secAtt;
-	secAtt.nLength              = sizeof(SECURITY_ATTRIBUTES);
-	secAtt.lpSecurityDescriptor = NULL;
-	secAtt.bInheritHandle       = FALSE;
+	memset(&secAtt,0,sizeof(secAtt)); secAtt.nLength =sizeof(secAtt);
 	const DWORD PIPE_MODE = PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT;
 
 	// req用(OUT)
@@ -94,7 +94,7 @@ bool CPipe::TryCreate(void)
 /* ----------------------------------------------------------------------------
  * 読み込み
  */
-void CPipe::Read(LPBYTE buf, DWORD length)
+void CServerPipe::Read(LPBYTE buf, DWORD length)
 {
 	LPBYTE pos = buf;
 	while(length > 0){
@@ -108,7 +108,7 @@ void CPipe::Read(LPBYTE buf, DWORD length)
 /* ----------------------------------------------------------------------------
  * 書き込み
  */
-void CPipe::Write(const LPBYTE buf, DWORD length)
+void CServerPipe::Write(const LPBYTE buf, DWORD length)
 {
 	LPBYTE pos = (LPBYTE)buf;
 	while(length > 0){

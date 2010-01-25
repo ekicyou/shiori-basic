@@ -1,17 +1,19 @@
 #pragma once
 
-class CPipe
+class CServerPipe
 {
 private:
-	CPath mBaseName;
+	CString mID;
+	CPath   mBaseName;
 	CHandle mReqPipe;
 	CHandle mResPipe;
 
 public:
-	CPipe(void);
-	virtual ~CPipe(void);
+	CServerPipe(void);
+	virtual ~CServerPipe(void);
 	void Close(void);
 
+	LPCTSTR GetID(void) const;
 	LPCTSTR GetBaseName(void) const;
 	CString GetReqName(void) const;
 	CString GetResName(void) const;

@@ -11,7 +11,7 @@
 class CPipeProcess
 {
 private:
-	CPipe mPipe;
+	CServerPipe mPipe;
 	STARTUPINFO mStartInfo;
 	PROCESS_INFORMATION mProcessInfo;
 
