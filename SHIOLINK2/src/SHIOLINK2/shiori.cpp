@@ -74,9 +74,22 @@ SHIORI_API HGLOBAL __cdecl request(HGLOBAL hGlobal_request, long& len)
     AutoGrobalFree autoFree(hGlobal_request);
     ATLTRACE2(_T("[SHIORI::request]\n"));
     CharArray res;
-    bool rc = api->Request((const BYTE*) hGlobal_request, len, res);
-    if (!rc) {
-        CreateBatRequestResponse(res ,"SHIOLINK2 API return false");
+	_ATLTRY
+	{
+	    bool rc = api->Request((LPCSTR) hGlobal_request, len, res);
+	    if (!rc) {
+	        CreateBatRequestResponse(res ,"SHIOLINK2 API return false");
+		}
+	}
+	_ATLCATCH(e)
+	{
+		CString mes(_T("SHIOLINK2 WIN32 ERROR "));
+		mes += GetWinErrMessage(e.m_hr);
+	    CreateBatRequestResponse(res , mes);
+	}
+	_ATLCATCHALL()
+	{
+	    CreateBatRequestResponse(res ,"SHIOLINK2 UNNONE ERROR");
 	}
 
     // ‰“šî•ñ‚Ìì¬

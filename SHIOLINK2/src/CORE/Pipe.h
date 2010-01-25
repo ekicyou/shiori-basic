@@ -17,8 +17,8 @@ public:
 public:
 	LPCTSTR GetID(void) const;
 	LPCTSTR GetBaseName(void) const;
-	CString GetReqName(void) const;
-	CString GetResName(void) const;
+	const CString GetReqName(void) const;
+	const CString GetResName(void) const;
 
 	void Write(LPCSTR buf, DWORD length);
 	void Read (LPSTR  buf, DWORD length);

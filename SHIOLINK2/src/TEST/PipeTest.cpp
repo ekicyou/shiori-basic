@@ -58,11 +58,7 @@ TEST(PipeTest, Create)
 		}
 	}
 	_ATLCATCH(e){
-		TCHAR buf[_MAX_PATH];
-		::FormatMessage(
-			FORMAT_MESSAGE_FROM_SYSTEM, NULL, e.m_hr, 0, buf, sizeof(buf), NULL);
-		CString mes;
-		mes.Format(_T("[0x%X]%s"), e.m_hr, buf);
+		CString mes = GetWinErrMessage(e.m_hr);
 		GTEST_FATAL_FAILURE_(CT2CA(mes));
 	}
 }

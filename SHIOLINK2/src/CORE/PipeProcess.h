@@ -18,8 +18,16 @@ private:
 public:
 	CPipeProcess(LPCTSTR str_commandline, LPCTSTR str_wrkdir);
 	virtual ~CPipeProcess(void);
-	LPCTSTR GetPipeBaseName(void) const;
-	CString GetPipeReqName(void) const;
-	CString GetPipeResName(void) const;
+	const CString GetReqName(void) const;
+	const CString GetResName(void) const;
 
+	void Write(LPCSTR buf, DWORD length);
+	void Read (LPSTR  buf, DWORD length);
+
+	void Write(const CStringA& text);
+	void WriteNetString(const CharArray& buf);
+	void WriteNetString(const CStringA& text);
+
+	bool ReadNetString(CharArray& buf, LPSTR& pStart, int& length);
+	bool ReadNetString(CharArray& buf, CStringA& text);
 };

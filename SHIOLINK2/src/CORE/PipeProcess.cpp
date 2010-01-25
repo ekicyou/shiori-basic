@@ -31,9 +31,21 @@ CPipeProcess::CPipeProcess(LPCTSTR str_commandline, LPCTSTR str_wrkdir)
 /* ----------------------------------------------------------------------------
  * Getter
  */
-LPCTSTR CPipeProcess::GetPipeBaseName() const { return mPipe.GetBaseName(); }
-CString CPipeProcess::GetPipeReqName()  const { return mPipe.GetReqName(); }
-CString CPipeProcess::GetPipeResName()  const { return mPipe.GetResName(); }
+const CString CPipeProcess::GetReqName() const { return mPipe.GetReqName(); }
+const CString CPipeProcess::GetResName() const { return mPipe.GetResName(); }
+
+/* ----------------------------------------------------------------------------
+ * Pipeアクセス
+ */
+void CPipeProcess::Write(LPCSTR buf, DWORD length) { mPipe.Write(buf, length); }
+void CPipeProcess::Read (LPSTR  buf, DWORD length) { mPipe.Read (buf, length); }
+
+void CPipeProcess::Write(const CStringA& text)          { mPipe.Write(text); }
+void CPipeProcess::WriteNetString(const CharArray& buf) { mPipe.WriteNetString(buf); }
+void CPipeProcess::WriteNetString(const CStringA& text) { mPipe.WriteNetString(text); }
+
+bool CPipeProcess::ReadNetString(CharArray& buf, LPSTR& pStart, int& length) { return mPipe.ReadNetString(buf, pStart, length); }
+bool CPipeProcess::ReadNetString(CharArray& buf, CStringA& text)             { return mPipe.ReadNetString(buf, text); }
 
 // ----------------------------------------------------------------------------
 // EOF

@@ -19,7 +19,7 @@ CShioriAPI::~CShioriAPI(void)
 }
 
 // リクエストを処理し、応答を作成します。
-bool CShioriAPI::Request(const BYTE *req, const long reqLength, CharArray &res)
+bool CShioriAPI::Request(LPCSTR req, const long reqLength, CharArray &res)
 {
 	return false;
 }

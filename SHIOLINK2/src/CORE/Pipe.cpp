@@ -21,10 +21,10 @@ void CPipe::Close(void)
 /* ----------------------------------------------------------------------------
  * [CPipe]Getter
  */
-LPCTSTR CPipe::GetID()       const { return mID; }
-LPCTSTR CPipe::GetBaseName() const { return mBaseName; }
-CString CPipe::GetReqName()  const { return mBaseName + _T("req"); }
-CString CPipe::GetResName()  const { return mBaseName + _T("res"); }
+LPCTSTR CPipe::GetID()             const { return mID; }
+LPCTSTR CPipe::GetBaseName()       const { return mBaseName; }
+const CString CPipe::GetReqName()  const { return mBaseName + _T("req"); }
+const CString CPipe::GetResName()  const { return mBaseName + _T("res"); }
 
 /* ----------------------------------------------------------------------------
  * [CPipe]Setter
@@ -52,8 +52,7 @@ void CPipe::Write(LPCSTR buf, DWORD length)
 }
 void CPipe::Write(const CStringA& text)
 {
-	LPCSTR buf = text;
-	Write(buf, text.GetLength());
+	Write((LPCSTR)text, text.GetLength());
 }
 
 /* ----------------------------------------------------------------------------
