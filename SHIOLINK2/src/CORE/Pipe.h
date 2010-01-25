@@ -24,11 +24,11 @@ public:
 	void Read (LPSTR  buf, DWORD length);
 
 	void Write(const CStringA& text);
-	void WriteNetString(const ByteArray& buf);
+	void WriteNetString(const CharArray& buf);
 	void WriteNetString(const CStringA& text);
 
-	bool ReadNetString(ByteArray& buf, LPSTR& pStart, int& length);
-	bool ReadNetString(ByteArray& buf, CStringA& text);
+	bool ReadNetString(CharArray& buf, LPSTR& pStart, int& length);
+	bool ReadNetString(CharArray& buf, CStringA& text);
 
 protected:
 	void SetID(LPCTSTR id);

@@ -9,7 +9,7 @@
 /* ----------------------------------------------------------------------------
  * エラーメッセージ作成
  */
-void CreateBatRequestResponse(ByteArray &res, LPSTR msg){
+void CreateBatRequestResponse(CharArray &res, LPSTR msg){
 	CAtlStringA text(      
 		"SHIORI/3.0 500 Internal Server Error\r\n"
 		"Charset: UTF-8\r\n"

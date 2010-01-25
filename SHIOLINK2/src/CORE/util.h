@@ -5,9 +5,9 @@
 // ----------------------------------------------------------------------------
 #pragma once
 
-class ByteArray : public CAtlArray<CHAR>{};
+class CharArray : public CAtlArray<CHAR>{};
 
-void CreateBatRequestResponse(ByteArray &res, LPSTR msg);
+void CreateBatRequestResponse(CharArray &res, LPSTR msg);
 
 class Pushd
 {

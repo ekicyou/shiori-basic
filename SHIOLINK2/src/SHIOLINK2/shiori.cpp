@@ -73,7 +73,7 @@ SHIORI_API HGLOBAL __cdecl request(HGLOBAL hGlobal_request, long& len)
 {
     AutoGrobalFree autoFree(hGlobal_request);
     ATLTRACE2(_T("[SHIORI::request]\n"));
-    ByteArray res;
+    CharArray res;
     bool rc = api->Request((const BYTE*) hGlobal_request, len, res);
     if (!rc) {
         CreateBatRequestResponse(res ,"SHIOLINK2 API return false");

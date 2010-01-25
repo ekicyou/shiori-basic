@@ -17,5 +17,5 @@ public:
 	virtual ~CShioriAPI(void);
 public:
 	// リクエストを処理し、応答を作成します。
-	bool Request(const BYTE *req, const long reqLength, ByteArray &res);
+	bool Request(const BYTE *req, const long reqLength, CharArray &res);
 };

@@ -24,35 +24,35 @@ TEST(PipeTest, Create)
 		{
 			CStringA text, result;
 			server.WriteNetString(text);
-			ByteArray buf;
+			CharArray buf;
 			ASSERT_TRUE(client.ReadNetString(buf, result));
 			ASSERT_EQ(text, result);
 		}
 		{
 			CStringA text('a',9), result;
 			server.WriteNetString(text);
-			ByteArray buf;
+			CharArray buf;
 			ASSERT_TRUE(client.ReadNetString(buf, result));
 			ASSERT_EQ(text, result);
 		}
 		{
 			CStringA text('b',99), result;
 			server.WriteNetString(text);
-			ByteArray buf;
+			CharArray buf;
 			ASSERT_TRUE(client.ReadNetString(buf, result));
 			ASSERT_EQ(text, result);
 		}
 		{
 			CStringA text('c',999), result;
 			server.WriteNetString(text);
-			ByteArray buf;
+			CharArray buf;
 			ASSERT_TRUE(client.ReadNetString(buf, result));
 			ASSERT_EQ(text, result);
 		}
 		{
 			CStringA text('d',1000), result;
 			server.WriteNetString(text);
-			ByteArray buf;
+			CharArray buf;
 			ASSERT_TRUE(client.ReadNetString(buf, result));
 			ASSERT_EQ(text, result);
 		}

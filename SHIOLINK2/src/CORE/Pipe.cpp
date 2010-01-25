@@ -74,7 +74,7 @@ void CPipe::Read(LPSTR buf, DWORD length)
 /* ----------------------------------------------------------------------------
  * [CPipe]netStringの書き込み
  */
-void CPipe::WriteNetString(const ByteArray& buf)
+void CPipe::WriteNetString(const CharArray& buf)
 {
 	// フォーマットの作成
 	CStringA data;
@@ -87,7 +87,7 @@ void CPipe::WriteNetString(const ByteArray& buf)
 }
 void CPipe::WriteNetString(const CStringA& text)
 {
-	ByteArray buf;
+	CharArray buf;
 	buf.SetCount(text.GetLength());
 	memcpy(buf.GetData(), (LPCSTR)text, buf.GetCount());
 	WriteNetString(buf);
@@ -117,7 +117,7 @@ static inline int CharCheck(CHAR a){
 }
 
 
-bool CPipe::ReadNetString(ByteArray& buf, LPSTR& pStart, int& length)
+bool CPipe::ReadNetString(CharArray& buf, LPSTR& pStart, int& length)
 {
 	size_t len;
 	size_t numLength = 0;
@@ -171,7 +171,7 @@ CHECK_LAST_CHAR:
 	length =(int) len;
 	return true;
 }
-bool CPipe::ReadNetString(ByteArray& buf, CStringA& text)
+bool CPipe::ReadNetString(CharArray& buf, CStringA& text)
 {
 	LPSTR pStart;
 	int length;
