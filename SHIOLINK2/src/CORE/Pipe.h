@@ -1,30 +1,49 @@
 #pragma once
 
-class CServerPipe
+class CPipe
 {
-private:
+protected:
 	CString mID;
 	CPath   mBaseName;
-	CHandle mReqPipe;
-	CHandle mResPipe;
+	CHandle mWrite;
+	CHandle mRead;
 
 public:
-	CServerPipe(void);
-	virtual ~CServerPipe(void);
+	CPipe(void);
+	virtual ~CPipe(void);
 	void Close(void);
 
+public:
 	LPCTSTR GetID(void) const;
 	LPCTSTR GetBaseName(void) const;
 	CString GetReqName(void) const;
 	CString GetResName(void) const;
 
-	void Create(void);
-
-	void Read (      LPBYTE buf, DWORD length);
 	void Write(const LPBYTE buf, DWORD length);
+	void Read (      LPBYTE buf, DWORD length);
 
+protected:
+	void SetID(LPCTSTR id);
+};
 
+class CServerPipe : public CPipe
+{
+public:
+	CServerPipe(void);
+	virtual ~CServerPipe(void);
+
+public:
+	void Create(void);
 private:
 	bool TryCreate(void);
+};
 
+class CClientPipe : public CPipe
+{
+public:
+	CClientPipe(LPCTSTR id);
+	virtual ~CClientPipe(void);
+
+public:
+	void Create(LPCTSTR id);
 };

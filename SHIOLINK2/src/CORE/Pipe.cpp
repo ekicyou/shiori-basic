@@ -2,7 +2,75 @@
 #include "Pipe.h"
 #include "Util.h"
 
+/* ----------------------------------------------------------------------------
+ * [CPipe]初期化・開放
+ */
+CPipe::CPipe(void)
+{
+}
+
+CPipe::~CPipe(void)
+{
+}
+
+void CPipe::Close(void)
+{
+	if(mRead !=NULL) mRead .Close();
+	if(mWrite!=NULL) mWrite.Close();
+}
+
+/* ----------------------------------------------------------------------------
+ * [CPipe]Getter
+ */
+LPCTSTR CPipe::GetID()       const { return mID; }
+LPCTSTR CPipe::GetBaseName() const { return mBaseName; }
+CString CPipe::GetReqName()  const { return mBaseName + _T("req"); }
+CString CPipe::GetResName()  const { return mBaseName + _T("res"); }
+
+/* ----------------------------------------------------------------------------
+ * [CPipe]Setter
+ */
+void CPipe::SetID(LPCTSTR id)
+{
+	mID = id;
+	CString buf;
+	buf.Format(_T("\\\\.\\pipe\\sl2scgi%x"), mID);
+	mBaseName = CPath(buf);
+}
+
+/* ----------------------------------------------------------------------------
+ * [CPipe]書き込み
+ */
+void CPipe::Write(const LPBYTE buf, DWORD length)
+{
+	LPBYTE pos = (LPBYTE)buf;
+	while(length > 0){
+		DWORD resultLen;
+		if(!::WriteFile(mWrite, pos, length, &resultLen, NULL)) ::AtlThrowLastWin32();
+		pos += resultLen;
+		length -= resultLen;
+	}
+}
+
+/* ----------------------------------------------------------------------------
+ * [CPipe]読み込み
+ */
+void CPipe::Read(LPBYTE buf, DWORD length)
+{
+	LPBYTE pos = buf;
+	while(length > 0){
+		DWORD resultLen;
+		if(!::ReadFile(mRead, pos, length, &resultLen, NULL)) ::AtlThrowLastWin32();
+		pos += resultLen;
+		length -= resultLen;
+	}
+}
+
+/* ----------------------------------------------------------------------------
+ * [CServerPipe]初期化・開放
+ */
 CServerPipe::CServerPipe(void)
+	:CPipe()
 {
 }
 
@@ -10,32 +78,18 @@ CServerPipe::~CServerPipe(void)
 {
 }
 
-void CServerPipe::Close(void)
-{
-	if(mReqPipe!=NULL)	mReqPipe.Close();
-	if(mResPipe!=NULL)	mResPipe.Close();
-}
-
-
 /* ----------------------------------------------------------------------------
- * Getter
- */
-LPCTSTR CServerPipe::GetID()       const { return mID; }
-LPCTSTR CServerPipe::GetBaseName() const { return mBaseName; }
-CString CServerPipe::GetReqName()  const { return mBaseName + _T("req"); }
-CString CServerPipe::GetResName()  const { return mBaseName + _T("res"); }
-
-/* ----------------------------------------------------------------------------
- * パイプの作成
+ * [CServerPipe]パイプの作成
  */
 void CServerPipe::Create(void)
 {
 	for(int i=0; i<10; i++){
-		if(TryCreate()) return;
+		if(TryCreate()){
+			return;
+		}
 	}
 	AtlThrow(ERROR_CANNOT_MAKE);
 }
-
 
 static bool firstCreate = true;
 bool CServerPipe::TryCreate(void)
@@ -52,10 +106,9 @@ bool CServerPipe::TryCreate(void)
 	// 名前の作成
 	for(UINT uUnique=rand() ;;uUnique++){
 		if(uUnique==0) continue;
-		mID.Format(_T("%x"), uUnique);
-		CAtlString buf;
-		buf.Format(_T("\\\\.\\pipe\\sl%x"), uUnique);
-		mBaseName = CPath(buf);
+		CString id;
+		id.Format(_T("%x"), uUnique);
+		SetID(id);
 		break;
 	}
 	ATLTRACE2(_T("[%s]  baseName = [%s]\n"), _T(__FUNCTION__), GetBaseName());
@@ -67,23 +120,23 @@ bool CServerPipe::TryCreate(void)
 	memset(&secAtt,0,sizeof(secAtt)); secAtt.nLength =sizeof(secAtt);
 	const DWORD PIPE_MODE = PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT;
 
-	// req用(OUT)
+	// req用(Write)
 	HANDLE req = ::CreateNamedPipe(
 		GetReqName(),
 		PIPE_ACCESS_OUTBOUND,
 		PIPE_MODE,
 		1, 1024, 1024, 0, &secAtt);
 	if (req == INVALID_HANDLE_VALUE) return false;
-	mReqPipe.Attach(req);
+	mWrite.Attach(req);
 
-	// res用(IN)
+	// res用(Read)
 	HANDLE res = ::CreateNamedPipe(
 		GetResName(),
 		PIPE_ACCESS_INBOUND,
 		PIPE_MODE,
 		1, 1024, 1024, 0, &secAtt);
 	if (res == INVALID_HANDLE_VALUE) return false;
-	mResPipe.Attach(res);
+	mRead.Attach(res);
 
 	//
 	ATLTRACE2(_T("[%s]end.\n"), _T(__FUNCTION__));
@@ -92,31 +145,49 @@ bool CServerPipe::TryCreate(void)
 
 
 /* ----------------------------------------------------------------------------
- * 読み込み
+ * [CClientPipe]初期化・開放
  */
-void CServerPipe::Read(LPBYTE buf, DWORD length)
+CClientPipe::CClientPipe(LPCTSTR id)
+	:CPipe()
 {
-	LPBYTE pos = buf;
-	while(length > 0){
-		DWORD resultLen;
-		if(!::ReadFile(mResPipe, pos, length, &resultLen, NULL)) ::AtlThrowLastWin32();
-		pos += resultLen;
-		length -= resultLen;
-	}
+	Create(id);
+}
+
+CClientPipe::~CClientPipe(void)
+{
 }
 
 /* ----------------------------------------------------------------------------
- * 書き込み
+ * [CClientPipe]パイプの作成
  */
-void CServerPipe::Write(const LPBYTE buf, DWORD length)
+void CClientPipe::Create(LPCTSTR id)
 {
-	LPBYTE pos = (LPBYTE)buf;
-	while(length > 0){
-		DWORD resultLen;
-		if(!::WriteFile(mReqPipe, pos, length, &resultLen, NULL)) ::AtlThrowLastWin32();
-		pos += resultLen;
-		length -= resultLen;
+	ATLTRACE2(_T("[%s]start.\n"), _T(__FUNCTION__));
+	Close();
+
+	// 名前の作成
+	SetID(id);
+
+	// res用(Write)
+	{
+		HANDLE res = ::CreateFile(
+			GetResName(),
+			GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
+		if (res == INVALID_HANDLE_VALUE) AtlThrowLastWin32();
+		mWrite.Attach(res);
 	}
+
+	// req用(Read)
+	{
+		HANDLE req = ::CreateFile(
+			GetReqName(),
+			GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+		if (req == INVALID_HANDLE_VALUE) AtlThrowLastWin32();
+		mRead.Attach(req);
+	}
+
+	//
+	ATLTRACE2(_T("[%s]end.\n"), _T(__FUNCTION__));
 }
 
 // EOF
