@@ -34,7 +34,7 @@ void CPipe::SetID(LPCTSTR id)
 {
 	mID = id;
 	CString buf;
-	buf.Format(_T("\\\\.\\pipe\\sl2scgi%x"), mID);
+	buf.Format(_T("\\\\.\\pipe\\sl2scgi%s"), mID);
 	mBaseName = CPath(buf);
 }
 
@@ -117,7 +117,10 @@ bool CServerPipe::TryCreate(void)
 
 	// SECURITY_ATTRIBUTES の設定(パイプを作るのに必要)
 	SECURITY_ATTRIBUTES secAtt;
-	memset(&secAtt,0,sizeof(secAtt)); secAtt.nLength =sizeof(secAtt);
+	memset(&secAtt,0,sizeof(secAtt));
+	secAtt.nLength =sizeof(secAtt);
+	secAtt.lpSecurityDescriptor = NULL;
+	secAtt.bInheritHandle       = FALSE;
 	const DWORD PIPE_MODE = PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT;
 
 	// req用(Write)
@@ -143,6 +146,14 @@ bool CServerPipe::TryCreate(void)
 	return true;
 }
 
+/* ----------------------------------------------------------------------------
+ * [CServerPipe]書き込み可能になるまで待機します。
+ */
+bool CServerPipe::WaitForConnection(void)
+{
+	BOOL rc = ::ConnectNamedPipe(mWrite, NULL);
+	return rc == TRUE;
+}
 
 /* ----------------------------------------------------------------------------
  * [CClientPipe]初期化・開放
@@ -168,22 +179,22 @@ void CClientPipe::Create(LPCTSTR id)
 	// 名前の作成
 	SetID(id);
 
-	// res用(Write)
-	{
-		HANDLE res = ::CreateFile(
-			GetResName(),
-			GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
-		if (res == INVALID_HANDLE_VALUE) AtlThrowLastWin32();
-		mWrite.Attach(res);
-	}
-
 	// req用(Read)
 	{
-		HANDLE req = ::CreateFile(
-			GetReqName(),
-			GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-		if (req == INVALID_HANDLE_VALUE) AtlThrowLastWin32();
-		mRead.Attach(req);
+		CString path(GetReqName());
+		HANDLE handle = ::CreateFile( path, GENERIC_READ, 0,
+			NULL, OPEN_EXISTING, 0, NULL);
+		if (handle == INVALID_HANDLE_VALUE) AtlThrowLastWin32();
+		mRead.Attach(handle);
+	}
+
+	// res用(Write)
+	{
+		CString path(GetResName());
+		HANDLE handle = ::CreateFile( path, GENERIC_WRITE , 0,
+			NULL, OPEN_EXISTING, 0, NULL);
+		if (handle == INVALID_HANDLE_VALUE) AtlThrowLastWin32();
+		mWrite.Attach(handle);
 	}
 
 	//

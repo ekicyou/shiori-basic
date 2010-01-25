@@ -34,6 +34,7 @@ public:
 
 public:
 	void Create(void);
+	bool WaitForConnection(void);
 private:
 	bool TryCreate(void);
 };

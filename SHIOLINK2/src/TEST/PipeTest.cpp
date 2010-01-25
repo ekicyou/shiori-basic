@@ -3,8 +3,31 @@
 
 TEST(PipeTest, Create)
 {
-	CServerPipe p;
-	p.Create();
+	_ATLTRY
+	{
+		CServerPipe server;
+		server.Create();
+		CClientPipe client(server.GetID());
+
+		LPCSTR send = "a";
+		BYTE buf[2];
+		server.Write((const LPBYTE)send, 1);
+		client.Read(buf, 1);
+		ASSERT_EQ((BYTE)'a', buf[0]);
+
+		send = "x";
+		client.Write((const LPBYTE)send, 1);
+		server.Read(buf, 1);
+		ASSERT_EQ((BYTE)'x', buf[0]);
+	}
+	_ATLCATCH(e){
+		TCHAR buf[_MAX_PATH];
+		::FormatMessage(
+			FORMAT_MESSAGE_FROM_SYSTEM, NULL, e.m_hr, 0, buf, sizeof(buf), NULL);
+		CString mes;
+		mes.Format(_T("[0x%X]%s"), e.m_hr, buf);
+		GTEST_FATAL_FAILURE_(CT2CA(mes));
+	}
 }
 
 static CString CreateTestExePath()
@@ -55,6 +78,12 @@ TEST(PipeTest, Exec1) {
     GetExitCodeProcess(hProcess, &exitCode);
     EXPECT_EQ(0, exitCode);
 }
+static int runPipeServer1(int argc, char **argv)
+{
+	std::cout << "[runPipeServer1]********\n";
+	return 0;
+}
+
 
 TEST(PipeTest, Exec2) {
 	// パイプの作成
@@ -74,30 +103,48 @@ TEST(PipeTest, Exec2) {
 		FAIL();
 	}
 	CHandle hProcess(pInfo.hProcess);
-	
+
+	// パイプ送信
+	{
+		pipe.WaitForConnection();
+		LPCSTR send = "a";
+		pipe.Write((const LPBYTE)send, 1);
+	}
+
 	// プロセス終了待機処理
 	ASSERT_EQ(WAIT_OBJECT_0, WaitForSingleObject(hProcess, 2000));
 	DWORD exitCode = -1;
     GetExitCodeProcess(hProcess, &exitCode);
     EXPECT_EQ(0, exitCode);
+
+	// パイプ受信
+	{
+		BYTE buf[2];
+		pipe.Read(buf, 1);
+		ASSERT_EQ((BYTE)'a', buf[0]);
+	}
 }
-
-
-
-static int runPipeServer1(int argc, char **argv)
-{
-	std::cout << "[runPipeServer1]********\n";
-	return 0;
-}
-
 static int runPipeServer2(int argc, char **argv)
 {
 	std::cout << "[runPipeServer2]********\n";
-	if(argc < 3) return -1;
-	CString pipeID(argv[2]);
-	std::cout << "[runPipeServer2]pipeID=[" << CT2CA(pipeID) << "]\n";
-	return 0;
+	if(argc < 3) return 1;
+	_ATLTRY
+	{
+		// オウム返し
+		CString pipeID(argv[2]);
+		CClientPipe pipe(pipeID);
+		BYTE buf[2];
+		pipe.Read(buf, 1);
+		pipe.Write(buf, 1);
+		return 0;
+	}
+	_ATLCATCHALL(){
+		return 2;
+	}
+	return 99;
 }
+
+
 
 int runPipeServer(int argc, char **argv)
 {
