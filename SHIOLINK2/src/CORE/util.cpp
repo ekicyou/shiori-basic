@@ -24,7 +24,7 @@ void CreateBatRequestResponse(CharArray &res, LPCSTR msg)
 }
 void CreateBatRequestResponse(CharArray &res, LPCTSTR msg)
 {
-	CreateBatRequestResponse(res, CT2A(msg, 65001));
+	CreateBatRequestResponse(res, CT2CA(msg, 65001));
 }
 
 /* ----------------------------------------------------------------------------
