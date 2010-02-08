@@ -6,10 +6,12 @@
  */
 CPipe::CPipe(void)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 }
 
 CPipe::~CPipe(void)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 }
 
 void CPipe::Close(void)
@@ -42,6 +44,7 @@ void CPipe::SetID(LPCTSTR id)
  */
 void CPipe::Write(LPCSTR buf, DWORD length)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 	LPBYTE pos = (LPBYTE)buf;
 	while(length > 0){
 		DWORD resultLen;
@@ -52,6 +55,7 @@ void CPipe::Write(LPCSTR buf, DWORD length)
 }
 void CPipe::Write(const CStringA& text)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 	Write((LPCSTR)text, text.GetLength());
 }
 
@@ -60,6 +64,7 @@ void CPipe::Write(const CStringA& text)
  */
 void CPipe::Read(LPSTR buf, DWORD length)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 	LPSTR pos = buf;
 	while(length > 0){
 		DWORD resultLen;
@@ -75,6 +80,7 @@ void CPipe::Read(LPSTR buf, DWORD length)
  */
 void CPipe::WriteNetString(const CharArray& buf)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 	// フォーマットの作成
 	CStringA data;
 	data.Format("%d:", buf.GetCount());
@@ -86,6 +92,7 @@ void CPipe::WriteNetString(const CharArray& buf)
 }
 void CPipe::WriteNetString(const CStringA& text)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 	CharArray buf;
 	buf.SetCount(text.GetLength());
 	memcpy(buf.GetData(), (LPCSTR)text, buf.GetCount());
@@ -118,6 +125,7 @@ static inline int CharCheck(CHAR a){
 
 bool CPipe::ReadNetString(CharArray& buf, LPSTR& pStart, int& length)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 	size_t len;
 	size_t numLength = 0;
 	size_t bufSize = 3;
@@ -172,6 +180,7 @@ CHECK_LAST_CHAR:
 }
 bool CPipe::ReadNetString(CharArray& buf, CStringA& text)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 	LPSTR pStart;
 	int length;
 	if(! ReadNetString(buf, pStart, length)) return false;
@@ -185,10 +194,12 @@ bool CPipe::ReadNetString(CharArray& buf, CStringA& text)
 CServerPipe::CServerPipe(void)
 	:CPipe()
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 }
 
 CServerPipe::~CServerPipe(void)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 }
 
 /* ----------------------------------------------------------------------------
@@ -196,6 +207,7 @@ CServerPipe::~CServerPipe(void)
  */
 void CServerPipe::Create(void)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 	for(int i=0; i<10; i++){
 		if(TryCreate()){
 			return;
@@ -207,7 +219,7 @@ void CServerPipe::Create(void)
 static bool firstCreate = true;
 bool CServerPipe::TryCreate(void)
 {
-	ATLTRACE2(_T("[%s]start.\n"), _T(__FUNCTION__));
+	SCOPE_LOG(_T(__FUNCTION__));
 	Close();
 
 	// 初回ならリセット
@@ -224,9 +236,9 @@ bool CServerPipe::TryCreate(void)
 		SetID(id);
 		break;
 	}
-	ATLTRACE2(_T("[%s]  baseName = [%s]\n"), _T(__FUNCTION__), GetBaseName());
-	ATLTRACE2(_T("[%s]   reqName = [%s]\n"), _T(__FUNCTION__), GetReqName());
-	ATLTRACE2(_T("[%s]   resName = [%s]\n"), _T(__FUNCTION__), GetResName());
+	LOG(_T(__FUNCTION__), _T("baseName = [%s]"), GetBaseName());
+	LOG(_T(__FUNCTION__), _T(" reqName = [%s]"), GetReqName());
+	LOG(_T(__FUNCTION__), _T(" resName = [%s]"), GetResName());
 
 	// SECURITY_ATTRIBUTES の設定(パイプを作るのに必要)
 	SECURITY_ATTRIBUTES secAtt;
@@ -255,7 +267,6 @@ bool CServerPipe::TryCreate(void)
 	mRead.Attach(res);
 
 	//
-	ATLTRACE2(_T("[%s]end.\n"), _T(__FUNCTION__));
 	return true;
 }
 
@@ -264,6 +275,7 @@ bool CServerPipe::TryCreate(void)
  */
 bool CServerPipe::WaitForConnection(void)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 	BOOL rc = ::ConnectNamedPipe(mWrite, NULL);
 	return rc == TRUE;
 }
@@ -274,11 +286,13 @@ bool CServerPipe::WaitForConnection(void)
 CClientPipe::CClientPipe(LPCTSTR id)
 	:CPipe()
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 	Create(id);
 }
 
 CClientPipe::~CClientPipe(void)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
 }
 
 /* ----------------------------------------------------------------------------
@@ -286,7 +300,7 @@ CClientPipe::~CClientPipe(void)
  */
 void CClientPipe::Create(LPCTSTR id)
 {
-	ATLTRACE2(_T("[%s]start.\n"), _T(__FUNCTION__));
+	SCOPE_LOG(_T(__FUNCTION__));
 	Close();
 
 	// 名前の作成
@@ -310,8 +324,6 @@ void CClientPipe::Create(LPCTSTR id)
 		mWrite.Attach(handle);
 	}
 
-	//
-	ATLTRACE2(_T("[%s]end.\n"), _T(__FUNCTION__));
 }
 
 // EOF

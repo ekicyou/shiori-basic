@@ -47,8 +47,8 @@ static BOOL unloadImpl(void)
  */
 SHIORI_API BOOL __cdecl load(HGLOBAL hGlobal_loaddir, long loaddir_len)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
     AutoGrobalFree autoFree(hGlobal_loaddir);
-    ATLTRACE2(_T("[SHIORI::load]\n"));
     unloadImpl();
     CAtlString sLoaddir((LPSTR)hGlobal_loaddir, (int)loaddir_len);
     CPath loaddir(sLoaddir);
@@ -62,7 +62,7 @@ SHIORI_API BOOL __cdecl load(HGLOBAL hGlobal_loaddir, long loaddir_len)
  */
 SHIORI_API BOOL __cdecl unload(void)
 {
-    ATLTRACE2(_T("[SHIORI::unload]\n"));
+	SCOPE_LOG(_T(__FUNCTION__));
     return unloadImpl();
 }
 
@@ -71,8 +71,8 @@ SHIORI_API BOOL __cdecl unload(void)
  */
 SHIORI_API HGLOBAL __cdecl request(HGLOBAL hGlobal_request, long& len)
 {
+	SCOPE_LOG(_T(__FUNCTION__));
     AutoGrobalFree autoFree(hGlobal_request);
-    ATLTRACE2(_T("[SHIORI::request]\n"));
     CharArray res;
 	_ATLTRY
 	{

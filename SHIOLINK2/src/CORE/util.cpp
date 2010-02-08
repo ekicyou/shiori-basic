@@ -60,4 +60,19 @@ Pushd::~Pushd()
 	SetCurrentDirectory(mOldDir);
 }
 
+/**----------------------------------------------------------------------------
+ * スコープログの出力
+ */
+
+ScopeLog::ScopeLog(LPCTSTR fname)
+	:mFuncName(fname)
+{
+    ATLTRACE2(_T("[%s]<<FUNC START>>\n"), mFuncName);
+}
+
+ScopeLog::~ScopeLog()
+{
+    ATLTRACE2(_T("[%s]<<FUNC END>>\n"), mFuncName);
+}
+
 // EOF

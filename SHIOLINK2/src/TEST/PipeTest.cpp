@@ -95,7 +95,7 @@ static BOOL CreateTestProcess(LPCTSTR param, LPPROCESS_INFORMATION pInfo)
 }
 
 TEST(PipeTest, Exec1) {
-	// 起動
+	// プロセス起動
 	PROCESS_INFORMATION pInfo;
 	BOOL rc = CreateTestProcess(_T("1"), &pInfo);
 	if(rc != TRUE){

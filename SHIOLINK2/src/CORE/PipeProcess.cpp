@@ -12,20 +12,54 @@
  */
 CPipeProcess::~CPipeProcess(void)
 {
+	// 最長１０秒待って、落ちなければ問答無用に叩き落す。
+	if(mProcess == NULL) return;
+	if(WAIT_OBJECT_0 == WaitForSingleObject(mProcess, 10000)) return;
+	LOG(_T(__FUNCTION__), _T("強制終了！"));
+	TerminateProcess(mProcess, -1);
 }
 
 /* ----------------------------------------------------------------------------
  * コンストラクタ
  */
-CPipeProcess::CPipeProcess(LPCTSTR str_commandline, LPCTSTR str_wrkdir)
+CPipeProcess::CPipeProcess(
+	LPCTSTR str_commandline, 
+	LPCTSTR str_wrkdir, 
+	bool viewConsole)
 {
-	ATLTRACE2(_T("[CPipeProcess::CPipeProcess]start.\n"));
-	ATLTRACE2(_T("[CPipeProcess::CPipeProcess]  cmd=[%s]\n") ,str_commandline);
-	ATLTRACE2(_T("[CPipeProcess::CPipeProcess]  wrkdir=[%s]\n"),str_wrkdir);
+	SCOPE_LOG(_T(__FUNCTION__));
+	LOG(_T(__FUNCTION__), _T("   cmd=[%s]"), str_commandline);
+	LOG(_T(__FUNCTION__), _T("wrkdir=[%s]"), str_wrkdir);
 
+	// コマンドライン作成
+	CString cmd(str_commandline);
+	cmd.Replace( _T("%PIPE%"), mPipe.GetID() );
 
-	//
-	ATLTRACE2(_T("[CPipeProcess::CPipeProcess]end.\n"));
+	// StartInfo作成
+	memset(&mStartInfo,0,sizeof(mStartInfo));
+	mStartInfo.cb = sizeof(mStartInfo);
+	mStartInfo.dwFlags =
+		STARTF_USEFILLATTRIBUTE |
+		STARTF_USECOUNTCHARS |
+		STARTF_USESHOWWINDOW |
+		0;
+	// コンソールの表示・非表示制御
+   if (viewConsole) mStartInfo.wShowWindow = SW_SHOWDEFAULT;
+   else             mStartInfo.wShowWindow = SW_HIDE;
+
+	// プロセス起動
+	{
+		Pushd dir(str_wrkdir);
+		BOOL rc = CreateProcess(
+			NULL, cmd.GetBuffer(), NULL, NULL, FALSE, 0, NULL, 
+			str_wrkdir, &mStartInfo, &mProcessInfo);
+		if(rc != TRUE){
+			DWORD dwError = ::GetLastError();
+			LOG( _T("ERROR CreateProcess(%x)"), dwError);
+			AtlThrowLastWin32();
+		}
+	}
+	mProcess.Attach(mProcessInfo.hProcess);
 }
 
 /* ----------------------------------------------------------------------------

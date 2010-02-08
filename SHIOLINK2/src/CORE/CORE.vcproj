@@ -217,6 +217,14 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\Ini.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Ini.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

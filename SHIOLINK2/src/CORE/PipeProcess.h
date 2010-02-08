@@ -14,9 +14,10 @@ private:
 	CServerPipe mPipe;
 	STARTUPINFO mStartInfo;
 	PROCESS_INFORMATION mProcessInfo;
+	CHandle mProcess;
 
 public:
-	CPipeProcess(LPCTSTR str_commandline, LPCTSTR str_wrkdir);
+	CPipeProcess(LPCTSTR str_commandline, LPCTSTR str_wrkdir, bool viewConsole = false);
 	virtual ~CPipeProcess(void);
 	const CString GetReqName(void) const;
 	const CString GetResName(void) const;

@@ -11,7 +11,7 @@ CShioriAPI::CShioriAPI(HINSTANCE hInst, LPCTSTR loadDir)
 	,mLoadDir(loadDir)
 {
 	mLoadDir.AddBackslash();
-	ATLTRACE2(_T("[CShioriAPI::CShioriAPI] loaddir=%s\n"), (LPCTSTR)mLoadDir);
+	LOG(_T(__FUNCTION__), _T("loaddir=%s"), (LPCTSTR)mLoadDir);
 }
 
 CShioriAPI::~CShioriAPI(void)
