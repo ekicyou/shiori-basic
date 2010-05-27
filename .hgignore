@@ -7,3 +7,5 @@ glob:*.dll
 glob:./Debug/*
 glob:./Release/*
 glob:./obj/*
+glob:*.sdf
+glob:./ipch/*
